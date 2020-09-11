@@ -1,36 +1,39 @@
 #!/bin/bash
 
+
+#
+# time file modified
+#
 FILES=$(find . -cmin -60)
 
+
 # scp to copy files
-# ex 
-# SCP="name@127.0.0.1:~/Desktop/App"
-SCP="name@host:~/Dir/ProjectMain"
+# ex
+# SCP="name@host:~/Desktop/App"
+SCP="name-host@host-address:~/Desktop/App"
+
 
 # base dir to project main
 # ex
 # BASEDIR="~/Desktop/App"
-BASEDIR="~/Dir/ProjectMain"
+BASEDIR="~/dir/app"
 
-# 
+#
 # SSH
 #
 # ssh-keygen required in the server
 #
-SSH="ssh name@host"
+SSH="ssh name-host@host-address"
 
 
-for i in $FILES; do
+for file in $FILES; do
+	if [ -f $file ]; then
 
-	if [ -f $i ]; then
+		DIR=$(echo $file | grep -oP "[^/].*/" |  grep  -o "[^.].*")
+		$SSH "[ ! -d $BASEDIR$DIR ] && mkdir -p $BASEDIR$DIR && echo \"$DIR   +++++++++++directory created+++++++++++++>   $BASEDIR\""
 
-		DIR=$(echo $i | grep -oP "[^/].*/" |  grep  -o "[^.].*")
-		scp -r $i $SCP$DIR
-		echo "$i   ==+copied+==>   $SCP$DIR"
+		scp -q $file $SCP$DIR
+		echo "$file   +++++++++++copied+++++++++++++>   $SCP$DIR"
 
-	else
-		DIR=$(echo $i | grep -o "[^.].*")
-		$SSH "[ ! -d $BASEDIR$DIR ] && mkdir -p $BASEDIR$DIR && echo $BASEDIR$DIR  ==+directory created+=="
 	fi
-
 done
