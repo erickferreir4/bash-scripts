@@ -29,7 +29,7 @@ SSH="ssh name-host@host-address"
 for file in $FILES; do
 	if [ -f $file ]; then
 
-		DIR=$(echo $file | grep -oP "[^/].*/" |  grep  -o "[^.].*")
+		DIR=$(echo $file | grep -o "[^/].*/" |  grep  -o "[^.].*")
 		$SSH "[ ! -d $BASEDIR$DIR ] && mkdir -p $BASEDIR$DIR && echo \"$DIR   +++++++++++directory created+++++++++++++>   $BASEDIR\""
 
 		scp -q $file $SCP$DIR
