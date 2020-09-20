@@ -1,5 +1,42 @@
 #!/bin/bash
 
+####################################
+#
+# ./deploy.sh watch
+#
+# - watch files modification to deploy in server
+#
+####################################
+
+####################################
+#
+# ./deploy.sh all n
+#
+# - deploy files last n hours
+#
+####################################
+
+####################################
+#
+# ./deploy.sh config
+#
+# - config ssh and root server
+#
+####################################
+
+####################################
+#
+# ./deploy.sh
+#
+# - deploy all files in server
+#
+####################################
+
+
+
+#
+# Create config to deploy
+#
 create_config()
 {
 	read -p "SSH: " SSH
@@ -11,6 +48,9 @@ create_config()
 	chmod ugo=r deploy_config.sh
 }
 
+#
+# Check has config deploy
+#
 check_config () 
 {
 	FILES=$(find . -name "deploy_config.sh" -type f)
@@ -22,7 +62,9 @@ check_config ()
 	source deploy_config.sh
 }
 
-
+#
+# Deploy files in server
+#
 deploy_files()
 {
 	echo
@@ -35,9 +77,10 @@ deploy_files()
 	scp $file "$SSH:$ROOT$DIR"
 }
 
-
-
-watch_files()
+#
+# Watch files modification
+#
+listening_files()
 {
 
 	sleep 2 
@@ -50,9 +93,12 @@ watch_files()
 		fi
 	done
 
-	watch_files
+	listening_files
 }
 
+#
+# Deploy all files option
+#
 all()
 {
 	if [ -z $TIME ]; then
@@ -69,8 +115,9 @@ all()
 }
 
 
-
-
+#
+# Main program
+#
 main()
 {
 	check_config	
@@ -81,8 +128,8 @@ main()
 	echo
 
 	if [ "$1" = 'watch' ]; then
-		echo 'watching....'
-		watch_files
+		echo 'listening...'
+		listening_files
 
 	elif [ "$1" = 'config' ]; then
 		chmod ugo=rw deploy_config.sh
@@ -93,12 +140,10 @@ main()
 			all $TIME
 
 	elif [ -z "$1" ]; then
-		echo 1
 		all
 	else
 		echo 'invalid command line'
 	fi
-
 }
 
 main $1 $2
