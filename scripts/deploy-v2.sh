@@ -7,6 +7,8 @@ create_config()
 
 	read -p "ROOT: " ROOT
 	echo "ROOT='$ROOT'" >> deploy_config.sh
+
+	chmod ugo=r deploy_config.sh
 }
 
 check_config () 
@@ -17,17 +19,15 @@ check_config ()
 		create_config
 	fi
 
-	chmod ugo=r deploy_config.sh
 	source deploy_config.sh
 }
 
 
 deploy_files()
 {
-
 	echo
 
-	DIR=$(echo $file | grep -o "[^/].*/" | grep -o "[^.].*" )
+	DIR=$( echo $file | grep -o "[^/].*/" | grep -o "[^.].*" )
 
 	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR"
 
@@ -53,6 +53,21 @@ watch_files()
 	watch_files
 }
 
+all()
+{
+	if [ -z $TIME ]; then
+		FILES_MODIFY=$(find . -name "*" -type f)
+	else
+		FILES_MODIFY=$(find . -cmin $TIME)
+	fi
+
+	for file in $FILES_MODIFY; do
+		if [ -f $file ];then
+			deploy_files
+		fi
+	done
+}
+
 
 
 
@@ -68,12 +83,24 @@ main()
 	if [ "$1" = 'watch' ]; then
 		echo 'watching....'
 		watch_files
+
+	elif [ "$1" = 'config' ]; then
+		chmod ugo=rw deploy_config.sh
+		create_config
+
+	elif [ "$1" = 'all' ] && [ "$2" -gt 0 ]; then
+			TIME=$2
+			all $TIME
+
+	elif [ -z "$1" ]; then
+		echo 1
+		all
+	else
+		echo 'invalid command line'
 	fi
-	
-
-
 
 }
 
-main $1
+main $1 $2
+
 
