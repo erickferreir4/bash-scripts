@@ -33,7 +33,6 @@
 ####################################
 
 
-
 #
 # Create config to deploy
 #
@@ -85,7 +84,14 @@ listening_files()
 
 	sleep 2 
 
-	FILES_MODIFY=$(find . -mmin 0.05)
+	SYS=$(uname)
+	
+	if [ $SYS = 'Linux' ];then
+		FILES_MODIFY=$(find . -mmin 0.05)
+	else
+		FILES_MODIFY=$(find . -mtime -5s)
+	fi
+
 
 	for file in $FILES_MODIFY; do
 		if [ -f $file ];then
