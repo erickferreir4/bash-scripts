@@ -4,6 +4,9 @@
 
 Always examine scripts downloaded from the internet before running them locally.
 
+<br/>
+<br/>
+
 Simple scripts bash collection
 
 # Getting Started
