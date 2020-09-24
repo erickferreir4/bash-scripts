@@ -10,9 +10,9 @@
 
 ####################################
 #
-# ./deploy.sh all n
+# ./deploy.sh all
 #
-# - deploy files last n hours
+# - deploy all files
 #
 ####################################
 
@@ -28,7 +28,7 @@
 #
 # ./deploy.sh
 #
-# - deploy all files in server
+# - deploy files last time
 #
 ####################################
 
@@ -44,7 +44,7 @@ create_config()
 	read -p "ROOT: " ROOT
 	echo "ROOT='$ROOT'" >> deploy_config.sh
 
-	read -p "DEPLOY TIME(min)(ex: 1): " TIME
+	read -p "DEPLOY TIME(seconds)(ex: 60): " TIME
 	echo "TIME='$TIME'" >> deploy_config.sh
 
 	chmod ugo=r deploy_config.sh
@@ -113,8 +113,8 @@ all()
 	if [ -z $TIME ]; then
 		FILES_MODIFY=$(find . -name "*" -type f)
 	else
-		echo "deployng files modified in the interval: $TIME min"
-		FILES_MODIFY=$(find . -cmin $TIME)
+		echo "deployng files modified in the interval: $TIME seconds"
+		FILES_MODIFY=$(find . -cmin -$TIME)
 	fi
 
 	for file in $FILES_MODIFY; do
