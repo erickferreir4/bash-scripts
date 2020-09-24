@@ -44,6 +44,9 @@ create_config()
 	read -p "ROOT: " ROOT
 	echo "ROOT='$ROOT'" >> deploy_config.sh
 
+	read -p "DEPLOY TIME(min)(ex: 1): " TIME
+	echo "TIME='$TIME'" >> deploy_config.sh
+
 	chmod ugo=r deploy_config.sh
 }
 
@@ -110,6 +113,7 @@ all()
 	if [ -z $TIME ]; then
 		FILES_MODIFY=$(find . -name "*" -type f)
 	else
+		echo "deployng files modified in the interval: $TIME min"
 		FILES_MODIFY=$(find . -cmin $TIME)
 	fi
 
@@ -140,18 +144,15 @@ main()
 	elif [ "$1" = 'config' ]; then
 		chmod ugo=rw deploy_config.sh
 		create_config
-
-	elif [ "$1" = 'all' ] && [ "$2" -gt 0 ]; then
-			TIME=$2
-			all $TIME
-
-	elif [ -z "$1" ]; then
+	elif [ "$1" = 'all' ]; then
 		all
+	elif [ -z "$1" ]; then
+		all $TIME
 	else
 		echo 'invalid command line'
 	fi
 }
 
-main $1 $2
+main $1
 
 
