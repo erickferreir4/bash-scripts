@@ -44,7 +44,7 @@ create_config()
 	read -p "ROOT: " ROOT
 	echo "ROOT='$ROOT'" >> deploy_config.sh
 
-	read -p "DEPLOY TIME(seconds)(ex: 60): " TIME
+	read -p "DEPLOY TIME(min)(ex: 5): " TIME
 	echo "TIME='$TIME'" >> deploy_config.sh
 
 	chmod ugo=r deploy_config.sh
