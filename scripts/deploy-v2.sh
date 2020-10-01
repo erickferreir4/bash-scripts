@@ -44,7 +44,7 @@ create_config()
 	read -p "ROOT: " ROOT
 	echo "ROOT='$ROOT'" >> deploy_config.sh
 
-	read -p "DEPLOY TIME(seconds)(ex: 60): " TIME
+	read -p "DEPLOY TIME(min)(ex: 5): " TIME
 	echo "TIME='$TIME'" >> deploy_config.sh
 
 	chmod ugo=r deploy_config.sh
@@ -114,7 +114,7 @@ all()
 		FILES_MODIFY=$(find . -name "*" -type f)
 		FLAG=0
 	else
-		echo "deployng files modified in the interval: $TIME seconds"
+		echo "deployng files modified in the interval: $TIME min"
 		FILES_MODIFY=$(find . -cmin -$TIME)
 	fi
 
