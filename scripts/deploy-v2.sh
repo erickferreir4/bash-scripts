@@ -38,16 +38,24 @@
 #
 create_config()
 {
+	if [ -f ".deploy_config" ]; then
+		chmod ugo=rw .deploy_config
+		DATE_FILE=$(date -r .deploy_config)
+	fi
+
+
 	read -p "SSH: " SSH
-	echo "SSH='$SSH'" > deploy_config.sh
+	echo "SSH='$SSH'" > .deploy_config
 
 	read -p "ROOT: " ROOT
-	echo "ROOT='$ROOT'" >> deploy_config.sh
+	echo "ROOT='$ROOT'" >> .deploy_config
 
-	read -p "DEPLOY TIME(min)(ex: 5): " TIME
-	echo "TIME='$TIME'" >> deploy_config.sh
+	chmod ugo=r .deploy_config
 
-	chmod ugo=r deploy_config.sh
+
+	if [ ! "$DATE_FILE" = '' ]; then
+		touch -d "$DATE_FILE" .deploy_config
+	fi
 }
 
 #
@@ -55,14 +63,17 @@ create_config()
 #
 check_config () 
 {
-	FILES=$(find . -name "deploy_config.sh" -type f)
-
-	if [ ! -f "$FILES" ]; then
+	if [ ! -f ".deploy_config" ]; then
 		create_config
 	fi
 
-	source deploy_config.sh
+	source .deploy_config
 }
+
+
+
+
+
 
 #
 # Deploy files in server
@@ -105,24 +116,38 @@ listening_files()
 	listening_files
 }
 
+
+
+
 #
 # Deploy all files option
 #
 all()
 {
-	if [ $FLAG ]; then
+
+	if [ "$1" = '' ]; then
+
+		FILES_MODIFY=$(find . -newer .deploy_config -type f)
+
+		if [ "$FILES_MODIFY" = '' ]; then
+			echo "no files modified for deployment"
+		else
+			echo "deployng files modified"
+		fi
+
+		touch .deploy_config
+
+	else 
+		echo "deployng all files"
 		FILES_MODIFY=$(find . -name "*" -type f)
-		FLAG=0
-	else
-		echo "deployng files modified in the interval: $TIME min"
-		FILES_MODIFY=$(find . -cmin -$TIME)
 	fi
 
 	for file in $FILES_MODIFY; do
 		if [ -f $file ];then
-			deploy_files
+			deploy_files $file
 		fi
 	done
+
 }
 
 
@@ -138,21 +163,33 @@ main()
 	echo "root: $ROOT"
 	echo
 
-	if [ "$1" = 'watch' ]; then
-		echo 'listening...'
-		listening_files
+	if [ "$1" = '' ]; then
+		all 
+
+	elif [ "$1" = 'all' ]; then
+		all $1
 
 	elif [ "$1" = 'config' ]; then
-		chmod ugo=rw deploy_config.sh
 		create_config
-	elif [ "$1" = 'all' ]; then
-		FLAG=1
-		all 
-	elif [ -z "$1" ]; then
-		all $TIME
-	else
-		echo 'invalid command line'
 	fi
+
+
+	#if [ "$1" = 'watch' ]; then
+	#	echo 'listening...'
+	#	listening_files
+
+	#elif [ "$1" = 'config' ]; then
+	#	chmod ugo=rw deploy_config.sh
+	#	create_config
+	#elif [ "$1" = 'all' ]; then
+	#	all
+	#elif [ -z "$1" ]; then
+	#	all $TIME
+	#else
+	#	echo 'invalid command line'
+	#fi
 }
 
 main $1
+
+
