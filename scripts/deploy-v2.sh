@@ -41,6 +41,8 @@ create_config()
 	if [ -f ".deploy_config" ]; then
 		chmod ugo=rw .deploy_config
 		DATE_FILE=$(date -r .deploy_config)
+	else
+		echo -e ".git\n.deploy_config\n/node_modules\npackage-lock.json\ndeploy_error.log" > .deployignore
 	fi
 
 
@@ -93,9 +95,21 @@ listening_files()
 #
 deploy_files()
 {
-	echo
 
 	DIR=$( echo $file | grep -o "[^/].*/" | grep -o "[^.].*" )
+
+
+	touch .deployignore
+	FILES_IGNORE=$(cat .deployignore)
+
+	for ignore in $FILES_IGNORE; do
+		if [[ "$file" =~ "$ignore" ]]; then
+			return 1
+		fi
+	done
+
+
+	echo 
 
 	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR; exit" 2> deploy_error.log
 
