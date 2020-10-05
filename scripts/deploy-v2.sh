@@ -70,10 +70,23 @@ check_config ()
 	source .deploy_config
 }
 
+#
+# Watch files modification
+#
+listening_files()
+{
+	sleep 2 
 
+	FILES_MODIFY=$(find . -newer .deploy_config -type f)
 
+	for file in $FILES_MODIFY; do
+		if [ -f $file ];then
+			deploy_files $file
+		fi
+	done
 
-
+	listening_files
+}
 
 #
 # Deploy files in server
@@ -84,40 +97,20 @@ deploy_files()
 
 	DIR=$( echo $file | grep -o "[^/].*/" | grep -o "[^.].*" )
 
-	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR"
+	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR; exit" 2> deploy_error.log
 
 	echo $ROOT$DIR
-	scp $file "$SSH:$ROOT$DIR"
-}
+	scp $file "$SSH:$ROOT$DIR" 2> deploy_error.log
 
-#
-# Watch files modification
-#
-listening_files()
-{
 
-	sleep 2 
+	touch deploy_error.log
+	ERROR=$(cat deploy_error.log)
 
-	SYS=$(uname)
-	
-	if [ $SYS = 'Linux' ];then
-		FILES_MODIFY=$(find . -mmin 0.05)
-	else
-		FILES_MODIFY=$(find . -mtime -5s)
+	if [ "$ERROR" = '' ]; then
+		touch .deploy_config
 	fi
 
-
-	for file in $FILES_MODIFY; do
-		if [ -f $file ];then
-			deploy_files
-		fi
-	done
-
-	listening_files
 }
-
-
-
 
 #
 # Deploy all files option
@@ -135,7 +128,6 @@ all()
 			echo "deployng files modified"
 		fi
 
-		touch .deploy_config
 
 	else 
 		echo "deployng all files"
@@ -149,7 +141,6 @@ all()
 	done
 
 }
-
 
 #
 # Main program
@@ -171,24 +162,17 @@ main()
 
 	elif [ "$1" = 'config' ]; then
 		create_config
+
+	elif [ "$1" = 'watch' ]; then
+		echo 'listening...'
+		listening_files
+
+	else
+		echo 'invalid command line'
+
 	fi
-
-
-	#if [ "$1" = 'watch' ]; then
-	#	echo 'listening...'
-	#	listening_files
-
-	#elif [ "$1" = 'config' ]; then
-	#	chmod ugo=rw deploy_config.sh
-	#	create_config
-	#elif [ "$1" = 'all' ]; then
-	#	all
-	#elif [ -z "$1" ]; then
-	#	all $TIME
-	#else
-	#	echo 'invalid command line'
-	#fi
 }
+
 
 main $1
 
