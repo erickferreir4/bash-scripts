@@ -58,6 +58,8 @@ create_config()
 	if [ ! "$DATE_FILE" = '' ]; then
 		touch -d "$DATE_FILE" .deploy_config
 	fi
+
+	exit
 }
 
 #
@@ -98,8 +100,6 @@ deploy_files()
 
 	DIR=$( echo $file | grep -o "[^/].*/" | grep -o "[^.].*" )
 
-
-	touch .deployignore
 	FILES_IGNORE=$(cat .deployignore)
 
 	for ignore in $FILES_IGNORE; do
@@ -111,7 +111,7 @@ deploy_files()
 
 	echo 
 
-	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR; exit" 2> deploy_error.log
+	ssh $SSH "[ ! -d $ROOT$DIR ] && mkdir -p $ROOT$DIR" 2> deploy_error.log
 
 	echo $ROOT$DIR
 	scp $file "$SSH:$ROOT$DIR" 2> deploy_error.log
@@ -129,23 +129,21 @@ deploy_files()
 #
 # Deploy all files option
 #
-all()
+deploy_all()
 {
-
-	if [ "$1" = '' ]; then
-
-		FILES_MODIFY=$(find . -newer .deploy_config -type f)
-
-		if [ "$FILES_MODIFY" = '' ]; then
-			echo "no files modified for deployment"
-		else
-			echo "deployng files modified"
-		fi
+	echo "deployng all files"
+	FILES_MODIFY=$(find . -name "*" -type f)
+}
 
 
-	else 
-		echo "deployng all files"
-		FILES_MODIFY=$(find . -name "*" -type f)
+deploy_modified()
+{
+	FILES_MODIFY=$(find . -newer .deploy_config -type f)
+
+	if [ "$FILES_MODIFY" = '' ]; then
+		echo "no files modified for deployment"
+	else
+		echo "deployng files modified"
 	fi
 
 	for file in $FILES_MODIFY; do
@@ -153,7 +151,6 @@ all()
 			deploy_files $file
 		fi
 	done
-
 }
 
 #
@@ -169,10 +166,10 @@ main()
 	echo
 
 	if [ "$1" = '' ]; then
-		all 
+		deploy_modified 
 
 	elif [ "$1" = 'all' ]; then
-		all $1
+		deploy_all
 
 	elif [ "$1" = 'config' ]; then
 		create_config
