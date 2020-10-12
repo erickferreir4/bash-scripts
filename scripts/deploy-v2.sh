@@ -132,7 +132,23 @@ deploy_files()
 deploy_all()
 {
 	echo "deployng all files"
-	FILES_MODIFY=$(find . -name "*" -type f)
+
+	FILES_MODIFY=$(find . -maxdepth 1)
+	FILES_IGNORE=$(cat .deployignore)
+
+	PATTERN=$(echo "$FILES_IGNORE")
+	PATTERN=$(echo $PATTERN | tr ' ' '\|')
+
+	UP_FILES=''
+
+	for file in $FILES_MODIFY; do
+		ignore=$(echo "$file" | egrep -o "$PATTERN")
+		if [ "$ignore" = '' -a "$file" != '.' ]; then
+			UP_FILES+="$file "
+		fi
+	done
+
+	scp -r $UP_FILES "$SSH:$ROOT$DIR" 2> deploy_error.log
 }
 
 
