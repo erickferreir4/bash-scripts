@@ -13,7 +13,7 @@ main()
 
 	if [ $IS_HTML != '' ]; then
 		if [ -f $1 ]; then
-			sed -zi 's/\s\s*/ /g; s/> </></g; s/> />/g; s/ </</g' $1
+			sed -zi 's/<\!-- *[a-zA-Z0-9]* *-->//g; s/\s\s*/ /g; s/> </></g; s/>  */> /g; s/  *</ </g' $1
 		fi
 	fi
 }
