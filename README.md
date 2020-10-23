@@ -12,7 +12,7 @@ Simple scripts bash collection
 # Getting Started
 
 
-* [minify_html.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/minify_html.sh): in development.
+* [minify_html.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/minify_html.sh): remove all space, comments and break line from html.
 * [up.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/up.sh): simple script to climb to parent folder.
 * [deploy.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/deploy.sh): simple script to deploy to a server.
 * [dolar.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/dolar.sh): simple script to see the dollar quote for local currency.
