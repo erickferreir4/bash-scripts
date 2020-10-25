@@ -12,6 +12,7 @@ Simple scripts bash collection
 # Getting Started
 
 
+* [list_files.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/list_files.sh): list all files in directory.
 * [goto.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/goto.sh): define alias go to the directory.
 * [minify_css.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/minify_css.sh): remove all space, comments and break line from css.
 * [minify_html.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/minify_html.sh): remove all space, comments and break line from html.
