@@ -7,10 +7,6 @@
 #
 #	Go to dir alias
 #
-#	alias goto=". $HOME/goto.sh"
-#
-#
-#
 #
 #
 #	goto alias
@@ -18,18 +14,21 @@
 #	goto add /dir alias
 #
 #
+#
+#
+#
 
 
 create_file()
 {
-	if [ ! -f ".goto" ]; then
+	if [ ! -f "$HOME/.goto" ]; then
 		touch "$HOME/.goto"
 	fi
 }
 
 goto_add()
 {
-	echo "$1=$2" >> .goto
+	echo "$1=$2" >> $HOME/.goto
 }
 
 go_to()
@@ -51,6 +50,7 @@ main()
 	else
 		go_to $1
 	fi
+
 }
 
 
