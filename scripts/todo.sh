@@ -42,7 +42,13 @@ create_file()
 
 todo_ls()
 {
-	cat "$HOME/.todo_list"
+	tasks=$(cat "$HOME/.todo_list")
+
+	if [ "$tasks" == "" ]; then
+		echo "No Tasks found."
+	else
+		cat "$HOME/.todo_list"
+	fi
 }
 
 todo_add()
@@ -70,6 +76,7 @@ todo_remove()
 todo_clear()
 {
 	sed -i 'd' "$HOME/.todo_list"
+	echo "Tasks cleared."
 }
 
 main()
