@@ -8,12 +8,26 @@
 #	Go to dir alias
 #
 #
-#
 #	goto alias
 #
-#	goto add /dir alias
 #
 #
+#	####### add directory currenty #######
+#
+#	goto add alias
+#
+#
+#
+#
+#	####### remove alias #######
+#
+#	goto remove alias
+#
+#
+#
+#	####### list all alias #######
+#
+#	goto ls
 #
 #
 #
@@ -28,7 +42,19 @@ create_file()
 
 goto_add()
 {
-	echo "$1=$2" >> $HOME/.goto
+	dir=$(pwd)
+
+	if [ "$1" != '' ]; then
+		echo "$dir=$1" >> $HOME/.goto
+	fi
+
+}
+
+goto_remove()
+{
+	if [ "$1" != '' ]; then
+		sed -i "/$1$/d" $HOME/.goto
+	fi
 }
 
 go_to()
@@ -40,22 +66,35 @@ go_to()
 	cd $dir
 }
 
+goto_ls()
+{
+	awk -F "=" '{print $1 "  ====>  " $2}' $HOME/.goto
+}
+
 
 main()
 {
 	create_file
 
 	if [ "$1" == "add" ]; then
-		goto_add $2 $3
+		goto_add $2
+
+	elif [ "$1" == "remove" ]; then
+		goto_remove $2
+
+	elif [ "$1" == "ls" ]; then
+		goto_ls
+
 	else
 		go_to $1
+
 	fi
 
 }
 
 
 
-main $1 $2 $3
+main $1 $2
 
 
 
