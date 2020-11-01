@@ -12,6 +12,7 @@ Simple scripts bash collection
 # Getting Started
 
 
+* [clone_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/create_repos.sh): clone repository from github.
 * [create_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/create_repos.sh): create repository in github.
 * [ipsum.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/ipsum.sh): generate lorem ipsum text.
 * [todo.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/todo.sh): a simple todo.
