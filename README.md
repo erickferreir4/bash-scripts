@@ -13,7 +13,7 @@ Simple scripts bash collection
 
 
 * [clone_all.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/clone_all.sh): clone all public repository from github.
-* [clone_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/clone_repos.sh): clone repository from github.
+* [clone_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/clone_repos.sh): clone public or private repository from github.
 * [create_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/create_repos.sh): create repository in github.
 * [ipsum.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/ipsum.sh): generate lorem ipsum text.
 * [todo.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/todo.sh): a simple todo.
