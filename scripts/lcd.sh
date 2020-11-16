@@ -3,6 +3,8 @@
 #
 #	cd & ls -al
 #
+#	alias=". lcd.sh"
+#
 #
 
 main()
