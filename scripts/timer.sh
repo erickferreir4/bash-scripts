@@ -1,11 +1,7 @@
 #!/bin/bash
 
 #
-#
-#	Cronometro
-#
-#	./cronometro.sh n
-#
+#	./timer.sh n
 #
 
 main()
