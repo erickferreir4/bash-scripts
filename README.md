@@ -12,6 +12,7 @@ Simple scripts bash collection
 # Getting Started
 
 
+* [timer.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/timer.sh): a simple stopwatch.
 * [lcd.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/lcd.sh): go to directory and list.
 * [clone_all.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/clone_all.sh): clone all public repository from github.
 * [clone_repos.sh](https://github.com/erickferreir4/bash-scripts/blob/master/scripts/clone_repos.sh): clone public or private repository from github.
