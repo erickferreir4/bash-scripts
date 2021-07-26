@@ -12,8 +12,9 @@
 # What year javascript was created?=1995
 #
 
+FILE="{{file...}}"
 COUNT=1
-LINES_FILE=$(cat question.txt | wc -l)
+LINES_FILE=$(cat $FILE | wc -l)
 
 FLAG=0
 FLAG_TRY=0
@@ -63,13 +64,13 @@ do
 	#
 	# Takes the line from the file
 	#
-	QUESTIONS=$(cat question.txt | tail -n+$NUMBER_LINE | head -1 )
+	QUESTIONS=$(cat $FILE | tail -n+$NUMBER_LINE | head -1 )
 
 	#
 	# Generates the question
 	#
-	QUESTION=$(echo $QUESTIONS | grep -oP "^[^=]*")
-	ANSWER=$(echo "$QUESTIONS" | grep -oP "[=^].*$" | grep -oP "[^=].*")
+	QUESTION=$(echo $QUESTIONS | awk -F "=" '{print $1}')
+	ANSWER=$(echo "$QUESTIONS" | awk -F "=" '{print $2}')
 
 	#
 	# Question
